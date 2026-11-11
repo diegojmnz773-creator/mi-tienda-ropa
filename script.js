@@ -45,7 +45,7 @@ function buyProduct(productId) {
   const message =
     `Hola Anto, me interesa esta prenda:\n\n` +
     `Producto: ${product.name}\n` +
-    `Precio: ${formatPrice(product.Price)}\n` +
+    `Precio: ${formatPrice(product.price)}\n` +
     `Tallas: ${getSizes(product.sizes)}\n\n` +
     `¿Está disponible?`;
 
