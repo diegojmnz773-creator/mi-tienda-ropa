@@ -5,10 +5,12 @@ const SUPABASE_KEY = "sb_publishable_XNo_u5CNTLj-4r-yGoh5OQ_cZ9EXoVd";
 const ADMIN_ID = "7e94240f-a568-42f7-87e6-eac77ecc8d14";
 const BUCKET = "ropa";
 
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db = window.supabaseClient;
+
+//const db = window.supabase.createClient(
+  //SUPABASE_URL,
+  //SUPABASE_KEY
+//);
 
 const loginSection = document.getElementById("loginSection");
 const dashboardSection = document.getElementById("dashboardSection");
