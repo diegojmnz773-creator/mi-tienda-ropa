@@ -135,3 +135,46 @@ searchInput.addEventListener("input", renderProducts);
 categoryFilter.addEventListener("change", renderProducts);
 
 loadProducts();
+
+
+const recoverySection = document.getElementById("recoverySection");
+const recoveryForm = document.getElementById("recoveryForm");
+
+db.auth.onAuthStateChange((event, session) => {
+  if (event === "PASSWORD_RECOVERY" && session) {
+    recoverySection.hidden = false;
+    recoverySection.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+recoveryForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const password = document.getElementById("newPassword").value;
+  const confirmation = document.getElementById("confirmPassword").value;
+  const message = document.getElementById("recoveryMessage");
+
+  if (password.length < 8) {
+    message.textContent = "La contraseña debe tener al menos 8 caracteres.";
+    return;
+  }
+
+  if (password !== confirmation) {
+    message.textContent = "Las contraseñas no coinciden.";
+    return;
+  }
+
+  const { error } = await db.auth.updateUser({
+    password: password
+  });
+
+  if (error) {
+    message.textContent = "Error: " + error.message;
+    return;
+  }
+
+  message.textContent = "¡Contraseña actualizada correctamente! Ya puedes entrar al panel.";
+
+  recoveryForm.reset();
+});
+
