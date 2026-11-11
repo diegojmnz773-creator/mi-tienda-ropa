@@ -38,20 +38,46 @@ function getSizes(sizes) {
   return sizes || "Consultar tallas";
 }
 
+//function buyProduct(productId) {
+  //const product = products.find(p => String(p.id) === String(productId));
+  //if (!product) return;
+
+  //const message =
+    //`Hola Anto, me interesa esta prenda:\n\n` +
+    //`Producto: ${product.name}\n` +
+    //`Precio: ${formatPrice(product.price)}\n` +
+    //`Tallas: ${getSizes(product.sizes)}\n\n` +
+    //`¿Está disponible?`;
+
+  //const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+ // window.open(url, "_blank", "noopener,noreferrer");
+//}
+
+
 function buyProduct(productId) {
-  const product = products.find(p => String(p.id) === String(productId));
-  if (!product) return;
+  const product = products.find(
+    p => String(p.id) === String(productId)
+  );
+
+  if (!product) {
+    alert("No encontramos esta prenda.");
+    return;
+  }
 
   const message =
-    `Hola Anto, me interesa esta prenda:\n\n` +
-    `Producto: ${product.name}\n` +
-    `Precio: ${formatPrice(product.price)}\n` +
-    `Tallas: ${getSizes(product.sizes)}\n\n` +
-    `¿Está disponible?`;
+    `¡Hola Anto! ❤️ Me interesa esta prenda de EL CLOSET DE ANTO.\n\n` +
+    `👗 PRODUCTO: ${product.name}\n` +
+    `💵 PRECIO: ${formatPrice(product.price)}\n` +
+    `📏 TALLAS: ${getSizes(product.sizes)}\n` +
+    `📝 DESCRIPCIÓN: ${product.description || "Consultar detalles"}\n\n` +
+    `¿Está disponible? Me gustaría realizar un pedido.`;
 
-  const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  const url =
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+  window.open(url, "_blank");
 }
+
 
 function renderProducts() {
   const search = searchInput.value.trim().toLowerCase();
