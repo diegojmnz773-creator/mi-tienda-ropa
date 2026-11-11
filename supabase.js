@@ -1,9 +1,11 @@
 
-const SUPABASE_URL = "https://psyoerdzvkedptvffpnt.supabase.co";
+(() => {
+  const SUPABASE_URL = "https://psyoerdzvkedptvffpnt.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_XNo_u5CNTLj-4r-yGoh5OQ_cZ9EXoVd";
+  const SUPABASE_KEY = "TU_CLAVE_PUBLICA_SB_PUBLISHABLE";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+  window.supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+})();
