@@ -7,11 +7,6 @@ const BUCKET = "ropa";
 
 const db = window.supabaseClient;
 
-//const db = window.supabase.createClient(
-  //SUPABASE_URL,
-  //SUPABASE_KEY
-//);
-
 const loginSection = document.getElementById("loginSection");
 const dashboardSection = document.getElementById("dashboardSection");
 const loginForm = document.getElementById("loginForm");
@@ -38,7 +33,10 @@ function resetProductForm() {
 
 async function uploadPhoto(file) {
   const extension = file.name.split(".").pop().toLowerCase();
-  const safeExtension = /^[a-z0-9]+$/.test(extension) ? extension : "jpg";
+  const safeExtension = /^[a-z0-9]+$/.test(extension)
+    ? extension
+    : "jpg";
+
   const path = `productos/${crypto.randomUUID()}.${safeExtension}`;
 
   const { error } = await db.storage
@@ -66,14 +64,16 @@ async function loadAdminProducts() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    adminProducts.textContent = "No se pudieron cargar los productos: " + error.message;
+    adminProducts.textContent =
+      "No se pudieron cargar los productos: " + error.message;
     return;
   }
 
   adminProducts.replaceChildren();
 
   if (!data.length) {
-    adminProducts.textContent = "Todavía no hay productos registrados.";
+    adminProducts.textContent =
+      "Todavía no hay productos registrados.";
     return;
   }
 
@@ -88,7 +88,8 @@ async function loadAdminProducts() {
     price.textContent = "$" + Number(product.price).toFixed(2);
 
     const sizes = document.createElement("p");
-    sizes.textContent = "Tallas: " + (product.sizes || "No especificadas");
+    sizes.textContent =
+      "Tallas: " + (product.sizes || "No especificadas");
 
     const editButton = document.createElement("button");
     editButton.type = "button";
@@ -101,11 +102,11 @@ async function loadAdminProducts() {
       document.getElementById("price").value = product.price ?? "";
       document.getElementById("category").value = product.category || "";
       document.getElementById("sizes").value = product.sizes || "";
-      document.getElementById("description").value = product.description || "";
+      document.getElementById("description").value =
+        product.description || "";
       document.getElementById("photo").value = "";
 
       showMessage(productMessage, "Editando: " + product.name);
-
       productForm.scrollIntoView({ behavior: "smooth" });
     });
 
@@ -114,7 +115,9 @@ async function loadAdminProducts() {
     deleteButton.textContent = "ELIMINAR";
 
     deleteButton.addEventListener("click", async () => {
-      if (!confirm("¿Seguro que deseas eliminar " + product.name + "?")) return;
+      if (!confirm("¿Seguro que deseas eliminar " + product.name + "?")) {
+        return;
+      }
 
       deleteButton.disabled = true;
 
@@ -143,28 +146,35 @@ loginForm.addEventListener("submit", async event => {
 
   showMessage(loginMessage, "Verificando acceso...");
 
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  const { data, error } = await db.auth.signInWithPassword({
-    email,
-    password
-  });
+  try {
+    if (!db) {
+      throw new Error("No se pudo conectar con Supabase.");
+    }
 
-  if (error) {
+    const { data, error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    if (data.user.id !== ADMIN_ID) {
+      await db.auth.signOut();
+      showMessage(loginMessage, "Acceso denegado. Usuario no autorizado.");
+      return;
+    }
+
+    currentUser = data.user;
+    showDashboard(true);
+    showMessage(loginMessage, "");
+    await loadAdminProducts();
+
+  } catch (error) {
     showMessage(loginMessage, "Error de acceso: " + error.message);
-    return;
   }
-
-  if (data.user.id !== ADMIN_ID) {
-    await db.auth.signOut();
-    showMessage(loginMessage, "Acceso denegado. Usuario no autorizado.");
-    return;
-  }
-
-  currentUser = data.user;
-  showDashboard(true);
-  await loadAdminProducts();
 });
 
 productForm.addEventListener("submit", async event => {
@@ -189,8 +199,12 @@ productForm.addEventListener("submit", async event => {
       description: document.getElementById("description").value.trim()
     };
 
-    if (!product.name || !product.category ||
-        !Number.isFinite(product.price) || product.price < 0) {
+    if (
+      !product.name ||
+      !product.category ||
+      !Number.isFinite(product.price) ||
+      product.price < 0
+    ) {
       throw new Error("Revisa el nombre, categoría y precio.");
     }
 
@@ -205,4 +219,42 @@ productForm.addEventListener("submit", async event => {
         throw new Error("La imagen no debe superar 5 MB.");
       }
 
-      product.image_url = await upload
+      product.image_url = await uploadPhoto(photo);
+    }
+
+    if (id) {
+      const { error } = await db
+        .from("products")
+        .update(product)
+        .eq("id", id);
+
+      if (error) throw error;
+
+      showMessage(productMessage, "Producto actualizado correctamente.");
+
+    } else {
+      if (!product.image_url) {
+        throw new Error("Selecciona una fotografía para el producto.");
+      }
+
+      const { error } = await db
+        .from("products")
+        .insert([product]);
+
+      if (error) throw error;
+
+      showMessage(productMessage, "Producto registrado correctamente.");
+    }
+
+    resetProductForm();
+    await loadAdminProducts();
+
+  } catch (error) {
+    showMessage(productMessage, "Error: " + error.message);
+
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+showDashboard(false);
