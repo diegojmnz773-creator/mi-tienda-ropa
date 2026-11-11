@@ -33,7 +33,6 @@ function formatPrice(price) {
 }
 
 function getSizes(sizes) {
-  if (Array.isArray(sizes)) return sizes.join(", ");
   return sizes || "Consultar tallas";
 }
 
@@ -82,7 +81,7 @@ function renderProducts() {
 
       <div class="product-info">
         <h3>${escapeHTML(product.name)}</h3>
-        <p class="product-price">${formatPrice(product.Price)}</p>
+        <p class="product-price">${formatPrice(product.price)}</p>
         <p class="product-sizes">
           Tallas: ${escapeHTML(getSizes(product.sizes))}
         </p>
