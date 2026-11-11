@@ -2,10 +2,12 @@
 const SUPABASE_URL = "https://psyoerdzvkedptvffpnt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_XNo_u5CNTLj-4r-yGoh5OQ_cZ9EXoVd";
 
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db = window.supabaseClient;
+
+//const db = window.supabase.createClient(
+ // SUPABASE_URL,
+  //SUPABASE_KEY
+//);
 
 const WHATSAPP = "593990961961";
 
