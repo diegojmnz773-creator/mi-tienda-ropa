@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7eee9">
+  <meta name="description" content="EL CLOSET DE ANTO - Moda femenina, estilo y elegancia.">
+  <title>EL CLOSET DE ANTO | Moda femenina</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <header class="header">
+    <a href="#" class="logo">EL CLOSET DE ANTO</a>
+    <p class="tagline">Moda, estilo y elegancia</p>
+
+    <nav class="navigation">
+      <a href="#inicio">Inicio</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <p class="eyebrow">TU ESTILO, TU ESENCIA</p>
+      <h1>Descubre tu próxima prenda favorita</h1>
+      <p>Elegancia y estilo para cada ocasión.</p>
+      <a href="#catalogo" class="btn-primary">
+        VER CATÁLOGO
+      </a>
+    </section>
+
+    <section class="catalog" id="catalogo">
+      <h2>Nuestra colección</h2>
+      <p>Encuentra prendas que reflejan tu estilo.</p>
+
+      <div class="catalog-tools">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Buscar prendas..."
+          aria-label="Buscar prendas"
+        >
+
+        <select id="categoryFilter" aria-label="Filtrar por categoría">
+          <option value="">Todas las categorías</option>
+        </select>
+      </div>
+
+      <div id="productGrid" class="product-grid">
+        <p class="loading">Cargando nuestra colección...</p>
+      </div>
+    </section>
+
+    <section class="contact" id="contacto">
+      <h2>¿Te gustó alguna prenda?</h2>
+      <p>Escríbenos y te ayudaremos con tu pedido.</p>
+      <a
+        href="https://wa.me/593990961961"
+        class="btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CONTACTAR POR WHATSAPP
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 EL CLOSET DE ANTO</p>
+    <p>Moda femenina con elegancia.</p>
+  </footer>
+</body>
+</html>
