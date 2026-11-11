@@ -79,6 +79,7 @@ function buyProduct(productId) {
 }
 
 
+
 function renderProducts() {
   const search = searchInput.value.trim().toLowerCase();
   const category = categoryFilter.value;
@@ -94,7 +95,8 @@ function renderProducts() {
   });
 
   if (filtered.length === 0) {
-    grid.innerHTML = "<p class='loading'>No encontramos prendas disponibles.</p>";
+    grid.innerHTML =
+      "<p class='loading'>No encontramos prendas disponibles.</p>";
     return;
   }
 
@@ -113,17 +115,25 @@ function renderProducts() {
         <p class="product-sizes">
           Tallas: ${escapeHTML(getSizes(product.sizes))}
         </p>
+
         <button
-          class="btn-primary"
+          class="btn-primary buy-button"
           type="button"
-          onclick="buyProduct(${JSON.stringify(String(product.id))})"
+          data-product-id="${escapeHTML(product.id)}"
         >
           COMPRAR POR WHATSAPP
         </button>
       </div>
     </article>
   `).join("");
+
+  grid.querySelectorAll(".buy-button").forEach(button => {
+    button.addEventListener("click", () => {
+      buyProduct(button.dataset.productId);
+    });
+  });
 }
+
 
 async function loadProducts() {
   grid.innerHTML = "<p class='loading'>Cargando colección...</p>";
