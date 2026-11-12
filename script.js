@@ -9,7 +9,7 @@ const db = window.supabaseClient;
   //SUPABASE_KEY
 //);
 
-const WHATSAPP = "593990961961";
+const WHATSAPP = "593969569214";
 
 let products = [];
 
