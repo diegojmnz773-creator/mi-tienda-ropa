@@ -258,3 +258,52 @@ productForm.addEventListener("submit", async event => {
 });
 
 showDashboard(false);
+
+
+// BOTÓN CERRAR SESIÓN
+
+const logoutButton = document.getElementById("logoutButton");
+
+logoutButton.addEventListener("click", async () => {
+  logoutButton.disabled = true;
+
+  try {
+    const { error } = await db.auth.signOut();
+
+    if (error) throw error;
+
+    currentUser = null;
+    resetProductForm();
+
+    adminProducts.replaceChildren();
+    showMessage(loginMessage, "Sesión cerrada correctamente.");
+    showMessage(productMessage, "");
+
+    showDashboard(false);
+
+    document.getElementById("password").value = "";
+
+  } catch (error) {
+    alert("No se pudo cerrar la sesión: " + error.message);
+
+  } finally {
+    logoutButton.disabled = false;
+  }
+});
+
+
+// BOTÓN CANCELAR EDICIÓN
+
+const cancelEditButton = document.getElementById("cancelEdit");
+
+cancelEditButton.addEventListener("click", () => {
+  resetProductForm();
+
+  showMessage(
+    productMessage,
+    "Edición cancelada. Puedes registrar una nueva prenda."
+  );
+
+  document.getElementById("name").focus();
+});
+
